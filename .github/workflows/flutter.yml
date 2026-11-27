@@ -36,10 +36,19 @@ jobs:
 
       - name: Analyze project
         run: flutter analyze
-
+        
+      - name: Force Gradle version
+        run: |
+          sed -i 's#^distributionUrl=.*#distributionUrl=https\://services.gradle.org/distributions/gradle-9.3.1-bin.zip#' android/gradle/wrapper/gradle-wrapper.properties
+          cat android/gradle/wrapper/gradle-wrapper.properties
+          cd android
+          chmod +x gradlew
+          ./gradlew --version
+          cd ..
+          
       - name: Build APK
         run: flutter build apk --release
-
+        
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
